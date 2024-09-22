@@ -18,7 +18,11 @@ const port = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin: [process.env.ORIGIN, process.env.ADMIN_ORIGIN],
+    origin: [
+      process.env.ORIGIN,
+      process.env.ADMIN_ORIGIN,
+      "https://ecommerce-frontend-sigma-seven.vercel.app",
+    ],
     credentials: true,
   })
 );
