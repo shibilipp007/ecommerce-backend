@@ -16,18 +16,23 @@ const app = express();
 
 const port = process.env.PORT || 4000;
 
-app.use(cors({ origin: process.env.ORIGIN, credentials: true }));
+app.use(
+  cors({
+    origin: [process.env.ORIGIN, process.env.ADMIN_ORIGIN],
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: "100mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/uploads", express.static(path.join(__dirname, "public", "uploads")));
 
-app.use("/auth", authRoutes);
-app.use("/products", productRoutes);
-app.use("/users", userRoutes);
-app.use("/cart", cartRoutes);
-app.use("/categories", categoryRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.use(errorHandler);
 

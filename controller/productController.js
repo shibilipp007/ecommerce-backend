@@ -40,7 +40,7 @@ const addProduct = catchAsync(async (req, res) => {
     images: cloudResults,
     category,
     slug: slugify(title, { lower: true }),
-    seller: req.user.userId,
+    seller: req.userId,
   });
   await product.save();
   res.json(product);

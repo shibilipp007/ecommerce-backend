@@ -13,21 +13,24 @@ const Login = async (req, res) => {
 
   const passwordMatch = await bcrypt.compare(password, user.password);
 
-  if (passwordMatch) {
-    var token = jwt.sign(
-      { _id: user._id, email: user.email, name: user.name, role: user.role },
-      process.env.JWT_KEY
-    );
-    res
-      .cookie("token", token, {
-        maxAge: 1 * 60 * 60 * 1000,
-        httpOnly: true,
-      })
-      .status(200)
-      .json(user);
-  } else {
-    res.status(401).send("unautherised access : password not match");
+  if (!passwordMatch) {
+    return res.status(401).send("unautherised access : password not match");
   }
+
+  var token = jwt.sign(
+    { _id: user._id, email: user.email, name: user.name, role: user.role },
+    process.env.JWT_KEY
+  );
+
+  const { password: abort, ...userData } = user.toObject();
+
+  res
+    .cookie("token", token, {
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    })
+    .status(200)
+    .json(userData);
 };
 
 const verifyLogin = async (req, res) => {

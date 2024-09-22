@@ -7,7 +7,6 @@ const {
 } = require("../controller/categoryController");
 const { secure } = require("../middleware/secure");
 const { hasRole } = require("../middleware/hasRole");
-const upload = require("../middleware/upload");
 
 const router = express.Router();
 

@@ -4,13 +4,13 @@ const catchAsync = require("../util/catchAsync");
 const cloudinary = require("../lib/cloudinary");
 
 const getAllcategory = async (req, res) => {
-  await Category.find({});
-  res.json(getAllcategory);
+  const categories = await Category.find({});
+  res.json(categories);
 };
 
 const getCatById = async (req, res) => {
-  await Category.findById();
-  res.json(getCatById);
+  const category = await Category.findById(req.params.id);
+  res.json(category);
 };
 
 const addCategory = catchAsync(async (req, res) => {

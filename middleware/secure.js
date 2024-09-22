@@ -1,18 +1,23 @@
 var jwt = require("jsonwebtoken");
 
 const secure = async (req, res, next) => {
-  if (req.cookies.token) {
-    try {
-      const userData = jwt.verify(req.cookies.token, process.env.JWT_KEY);
-      req.user = { userId: userData._id, role: userData.role };
-      console.log(userData);
+  const token = req.cookies?.token;
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Unautherised request access denied." });
+  }
 
-      next();
-    } catch {
-      res.status(401).json({ message: "unautherised access" });
-    }
-  } else {
-    res.status(401).json("NO user found");
+  try {
+    const userData = jwt.verify(req.cookies.token, process.env.JWT_KEY);
+    console.log(userData);
+    req.userId = userData._id;
+    req.role = userData.role;
+
+    next();
+  } catch (error) {
+    console.log(error);
+    res.status(403).json({ message: "Invalid token." });
   }
 };
 
