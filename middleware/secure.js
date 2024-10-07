@@ -13,6 +13,7 @@ const secure = async (req, res, next) => {
     console.log(userData);
     req.userId = userData._id;
     req.role = userData.role;
+    req.user = userData;
 
     next();
   } catch (error) {

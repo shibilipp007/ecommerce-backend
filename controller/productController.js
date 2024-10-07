@@ -4,7 +4,16 @@ const catchAsync = require("../util/catchAsync");
 const cloudinary = require("../lib/cloudinary");
 
 const getAllPorducts = catchAsync(async (req, res) => {
-  const products = await Product.find({}).populate("category", "title");
+  const { query } = req.query;
+  let products;
+  if (query) {
+    const $query = { $regex: ".*" + query + ".*" };
+    products = await Product.find({
+      $or: [{ title: $query }, { description: $query }],
+    }).populate("category");
+  } else {
+    products = await Product.find({}).populate("category");
+  }
   res.json(products);
 });
 
@@ -59,7 +68,7 @@ const deleteProduct = catchAsync(async (req, res) => {
   if (!product) {
     return res.status(404).json({ message: "Product not found. " });
   }
-  if (product.seller.toString() !== req.user.userId) {
+  if (product.seller.toString() !== req.userId) {
     return res
       .status(401)
       .json({ message: "You can't delete some's product." });
