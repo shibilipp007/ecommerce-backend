@@ -68,7 +68,7 @@ const handlePayment = catchAsync(async (req, res) => {
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
         mode: "payment",
-        success_url: "http://localhost:5173/orders/success",
+        success_url: `${process.env.ORIGIN}/orders/success`,
         cancel_url: "http://localhost:5173/orders/rejected",
       });
 
