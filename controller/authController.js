@@ -42,7 +42,7 @@ const verifyLogin = async (req, res) => {
 
 const LogoutHandler = (req, res) => {
   return res
-    .clearCookie("token")
+    .clearCookie("token", { sameSite: "none" })
     .sendStatus(204)
     .json({ message: "loggedOut" });
 };
